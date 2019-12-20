@@ -1,11 +1,18 @@
 import React from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 
-function TextTodo() {
+function TextTodo(props) {
+  let {inputTodo, setState} = props;
   return (
     <View style={styles.container}>
       <Text style={styles.textTitle}>New To do</Text>
-      <TextInput style={styles.inputBar} />
+      <TextInput
+        maxLength={20}
+        placeholder="Insert here!"
+        style={styles.inputBar}
+        onChangeText={value => setState({inputTodo: value})}
+        value={inputTodo}
+      />
     </View>
   );
 }
@@ -25,6 +32,7 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#E5E5E5',
     borderRadius: 10,
+    padding: 10,
   },
 });
 
