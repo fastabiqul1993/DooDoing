@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  AsyncStorage,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
 
 import Title from '../../components/molecules/Title';
 import Todo from '../../components/molecules/Todo';
@@ -20,32 +21,28 @@ export default class Todos extends Component {
     todos: [],
   };
 
-  // componentDidMount = async () => {
-  //   try {
-  //     const keys = await AsyncStorage.getKeys();
-  //     const result = await AsyncStorage.getMultiple(keys);
-  //     console.log(result);
-  //     // return result.map(req => JSON.parse(req));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  componentDidMount = async () => {
+    const existingTodo = await AsyncStorage.getItem('todos');
+    console.log('masuk', existingTodo);
+    this.setState({todos: JSON.parse(existingTodo)});
+  };
 
   addTodo = async () => {
-    let sentence = this.state.inputTodo;
     let newId = `_ ${Math.random()
       .toString(36)
       .substr(2, 9)}`;
-    let todo = {id: newId, sentence: sentence, status: false};
+    const todoTosave = {id: newId, todo: this.state.inputTodo, status: false};
+    const existingTodo = await AsyncStorage.getItem();
 
-    sentence.length > 0
-      ? this.setState({
-          todos: [...this.state.todos, todo],
-          inputTodo: '',
-        })
-      : Alert.alert('Hold', 'Please input todo first!', [
-          {text: 'Okay', onPress: () => {}},
-        ]);
+    await AsyncStorage.setItem('todos', JSON.stringify());
+    // sentence.length > 0
+    //   ? this.setState({
+    //       todos: [...this.state.todos, todo],
+    //       inputTodo: '',
+    //     })
+    //   : Alert.alert('Hold', 'Please input todo first!', [
+    //       {text: 'Okay', onPress: () => {}},
+    //     ]);
   };
 
   markTodo = id => {
